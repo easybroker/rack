@@ -123,7 +123,7 @@ module Rack
           end
 
           content = @io.read(@content_length && BUFSIZE >= @content_length ? @content_length : BUFSIZE)
-          raise EOFError, "bad content body"  if content.nil? || content.empty?
+          break if content.nil? || content.empty?
 
           @buf << content
           @content_length -= content.size if @content_length
