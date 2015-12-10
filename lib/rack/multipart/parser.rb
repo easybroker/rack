@@ -80,7 +80,7 @@ module Rack
       def fast_forward_to_first_boundary
         loop do
           content = @io.read(BUFSIZE)
-          raise EOFError, "bad content body" unless content
+          break unless content
           @buf << content
 
           while @buf.gsub!(/\A([^\n]*\n)/, '')
@@ -88,7 +88,7 @@ module Rack
             return if read_buffer == full_boundary
           end
 
-          raise EOFError, "bad content body" if Utils.bytesize(@buf) >= BUFSIZE
+          break if Utils.bytesize(@buf) >= BUFSIZE
         end
       end
 
